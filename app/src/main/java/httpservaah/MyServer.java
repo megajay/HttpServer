@@ -26,12 +26,25 @@ public class MyServer {
             while ((msg = bufferedReader.readLine()) != null && !msg.isEmpty()) {
                 System.out.println(msg);
             }
+
+            InputStream input = MyServer.class.getResourceAsStream("/index.html");
+            BufferedReader bufferedReaderhtml = new BufferedReader(new InputStreamReader(input));
+            
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            while ((line = bufferedReaderhtml.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            String htmlPage = sb.toString();
+
+
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             out.write("HTTP/1.1 200 OK\r\n");
-            out.write("Content-Type: text/plain\r\n");
+            out.write("Content-Type: text/html\r\n");
             out.write("\r\n");
-            out.write("Hello World!");
+            out.write(htmlPage);
             out.flush();
 
             socket.close();
